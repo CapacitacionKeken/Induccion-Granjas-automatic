@@ -7,9 +7,9 @@
   
   window.useFirebase = true;
   const firebaseConfig = {
-    apiKey: "AIzaSyDK4tg6FCdfcDN9BLEc2VqnHg_MRM1-SUo",
-    authDomain: "enero-5d9ea.firebaseapp.com",
-    projectId: "enero-5d9ea",
+    apiKey: "AIzaSyDpYfb5HkFvdo-obK0Cju7Xwkda1TFpKPs",
+    authDomain: "usuarios-da6ee.firebaseapp.com",
+    projectId: "usuarios-da6ee",
   };
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Seguridad Industrial</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header"><h1>Seguridad Industrial</h1></header>
+  <main class="container">
+    <div class="card">
+      <h3>Video obligatorio</h3>
+      <div id="playerWrapper">
+        <iframe id="vimeoPlayer" src="https://player.vimeo.com/video/1075929416?h=fc3c503605" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <div class="row" style="margin-top:12px;">
+        <button id="afterWatch" class="btn" disabled>Seguir</button>
+      </div>
+      <p id="info" class="msg"></p>
+      <div id="step2" style="display:none;">
+        <p>Para aprobar el curso, debe obtener una calificación mínima de <strong>24 sobre 30</strong>, la cual se muestra al final del examen.</p>
+        <button id="toForm" class="btn">Seguir</button>
+      </div>
+      <div id="final" style="display:none;">
+        <p>Has finalizado. Presiona Regresar para volver a las opciones.</p>
+        <button id="volver" class="btn outline">Regresar</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://player.vimeo.com/api/player.js"></script>
+  <script src="firebase.js"></script>
+  <script src="logic.js"></script>
+  <script>
+    (async function(){
+      const player = new Vimeo.Player('vimeoPlayer');
+      const afterWatch = document.getElementById('afterWatch');
+      const info = document.getElementById('info');
+      const step2 = document.getElementById('step2');
+      const toForm = document.getElementById('toForm');
+      const final = document.getElementById('final');
+      const volver = document.getElementById('volver');
+      const curp = localStorage.getItem('curp_logged');
+      if(!curp){ window.location.href='index.html'; return; }
+
+      player.on('ended', function(){
+        afterWatch.disabled = false;
+      });
+
+      afterWatch.addEventListener('click', function(){
+        step2.style.display='block';
+        info.textContent = '';
+      });
+
+      toForm.addEventListener('click', async function(){
+        const res = await decrementOpportunity(curp,'seg');
+        if(!res.success){ info.textContent = res.message; return; }
+        window.open('https://forms.office.com/r/3H2Z16xtFA','_blank');
+        final.style.display='block';
+      });
+
+      volver.addEventListener('click', function(){
+        window.location.href='opciones.html';
+      });
+    })();
+  </script>
+</body>
+</html>

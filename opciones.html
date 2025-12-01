@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Opciones de Presentación</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header"><h1>Selecciona la presentación</h1></header>
+  <main class="container">
+    <div class="card" id="userCard">
+      <p id="userInfo"></p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Bioseguridad</h3>
+        <p>Oportunidades restantes: <span id="oppBio">-</span></p>
+        <p id="bioMsg" class="msg"></p>
+        <div class="row">
+          <button id="btnBio" class="btn">Seleccionar</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Seguridad Industrial</h3>
+        <p>Oportunidades restantes: <span id="oppSeg">-</span></p>
+        <p id="segMsg" class="msg"></p>
+        <div class="row">
+          <button id="btnSeg" class="btn">Seleccionar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <a class="btn outline" id="logoutBtn" href="#">Cerrar sesión</a>
+    </div>
+  </main>
+
+  <script src="firebase.js"></script>
+  <script src="logic.js"></script>
+  <script>
+    (async function(){
+      const curp = localStorage.getItem('curp_logged');
+      if(!curp){ window.location.href='index.html'; return; }
+      document.getElementById('userInfo').textContent = 'Usuario: '+curp;
+      const user = await getUser(curp);
+      if(!user.exists){ alert('Usuario no encontrado. Regístrese.'); localStorage.removeItem('curp_logged'); window.location.href='index.html'; return; }
+      updateUI(user.data);
+
+      document.getElementById('btnBio').addEventListener('click', function(){
+        if(user.data.oportunidadesBio>0){ window.location.href='bioseguridad.html'; }
+      });
+      document.getElementById('btnSeg').addEventListener('click', function(){
+        if(user.data.oportunidadesSeg>0){ window.location.href='seg-industrial.html'; }
+      });
+      document.getElementById('logoutBtn').addEventListener('click', function(e){
+        e.preventDefault(); localStorage.removeItem('curp_logged'); window.location.href='index.html';
+      });
+
+      // Refresh every minute to reflect possible counters
+      setInterval(async ()=>{
+        const u = await getUser(curp);
+        updateUI(u.data);
+      },60000);
+
+      function updateUI(data){
+        document.getElementById('oppBio').textContent = data.oportunidadesBio;
+        document.getElementById('oppSeg').textContent = data.oportunidadesSeg;
+        // Bio button
+        const bioBtn = document.getElementById('btnBio');
+        const segBtn = document.getElementById('btnSeg');
+        const bioMsg = document.getElementById('bioMsg');
+        const segMsg = document.getElementById('segMsg');
+        bioMsg.textContent = '';
+        segMsg.textContent = '';
+        if(data.oportunidadesBio<=0) {
+          bioBtn.disabled = true;
+          bioMsg.textContent = 'Debes esperar dos días antes de volver a presentar. Gracias.';
+        } else bioBtn.disabled = false;
+        if(data.oportunidadesSeg<=0) {
+          segBtn.disabled = true;
+          segMsg.textContent = 'Debes esperar dos días antes de volver a presentar. Gracias.';
+        } else segBtn.disabled = false;
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Iniciar Sesión</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header"><h1>Iniciar Sesión</h1></header>
+  <main class="container">
+    <form id="loginForm" class="card">
+      <label>CURP:<input id="curp" required maxlength="18" /></label>
+      <label>Contraseña:<input id="password" type="password" required /></label>
+      <div class="row">
+        <button class="btn" type="submit">Iniciar Sesión</button>
+        <a class="btn outline" href="index.html">Volver</a>
+      </div>
+      <p id="msg" class="msg"></p>
+    </form>
+  </main>
+  <script src="firebase.js"></script>
+  <script src="logic.js"></script>
+  <script>
+    window.APP_FIXED_PASSWORD = "ClaveFija123!";
+    document.getElementById('loginForm').addEventListener('submit', async function(e){
+      e.preventDefault();
+      const curp = document.getElementById('curp').value.trim().toUpperCase();
+      const pw = document.getElementById('password').value;
+      const msg = document.getElementById('msg');
+      if(pw !== window.APP_FIXED_PASSWORD){ msg.textContent='Contraseña incorrecta.'; return; }
+      const res = await appLogin(curp);
+      if(res.success){
+        localStorage.setItem('curp_logged', curp);
+        window.location.href = 'opciones.html';
+      } else {
+        msg.textContent = res.message;
+      }
+    });
+  </script>
+</body>
+</html>

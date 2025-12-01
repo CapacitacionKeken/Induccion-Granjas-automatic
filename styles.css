@@ -1,0 +1,30 @@
+/* styles.css - diseño profesional e institucional */
+:root{
+  --blue:#003366;
+  --light:#E9EEF6;
+  --muted:#6b7280;
+  --card-bg:#ffffff;
+  --radius:10px;
+  font-family: "Roboto", "Arial", sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--light);color:#0b1320}
+.header{background:var(--blue);color:white;padding:18px 24px;display:flex;gap:12px;align-items:center}
+.logo{height:48px}
+.header h1{margin:0;font-size:20px}
+.container{max-width:980px;margin:36px auto;padding:0 16px}
+.card{background:var(--card-bg);padding:20px;border-radius:var(--radius);box-shadow:0 6px 20px rgba(3,10,26,0.08);margin-bottom:16px}
+.actions{text-align:center;margin-top:8px}
+.row{display:flex;gap:10px;align-items:center}
+.btn{background:var(--blue);color:white;padding:10px 16px;border-radius:8px;border:none;text-decoration:none;cursor:pointer}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
+.btn.outline, .btn.outline:link, .btn.outline:visited{background:white;color:var(--blue);border:2px solid var(--blue)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+label{display:block;margin:8px 0}
+input{width:100%;padding:10px;border-radius:6px;border:1px solid #d1d5db}
+.msg{color:var(--muted);margin-top:8px}
+.footer{text-align:center;padding:16px;color:#6b7280}
+@media(max-width:700px){
+  .grid{grid-template-columns:1fr}
+  iframe{width:100%;height:auto}
+}
